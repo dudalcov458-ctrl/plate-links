@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задания с выплатами | Финтех партнерка</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #f1f5f9; min-height: 100vh; }
+       
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+       
+        /* Шапка */
+        .header { text-align: center; padding: 40px 20px; background: rgba(30, 41, 59, 0.7); border-radius: 20px; margin-bottom: 30px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        .logo { font-size: 3.5rem; margin-bottom: 15px; background: linear-gradient(90deg, #10b981, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h1 { font-size: 2.8rem; margin-bottom: 10px; background: linear-gradient(90deg, #f1f5f9, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { color: #94a3b8; font-size: 1.1rem; margin-bottom: 25px; }
+       
+        /* Статистика */
+        .stats { display: flex; justify-content: center; gap: 25px; margin: 20px 0; flex-wrap: wrap; }
+        .stat-item { background: rgba(255,255,255,0.05); padding: 15px 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); text-align: center; min-width: 180px; }
+        .stat-number { font-size: 2.2rem; font-weight: 700; background: linear-gradient(90deg, #10b981, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .stat-label { color: #94a3b8; font-size: 0.9rem; margin-top: 5px; }
+       
+        /* Контактная панель */
+        .contact-panel { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin: 25px 0; }
+        .contact-badge { background: rgba(255,255,255,0.05); padding: 12px 20px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 10px; }
+        .contact-badge i { color: #06b6d4; }
+       
+        /* Основные секции */
+        .section { background: rgba(30, 41, 59, 0.7); border-radius: 20px; padding: 30px; margin-bottom: 25px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        .section-title { font-size: 1.8rem; margin-bottom: 25px; display: flex; align-items: center; gap: 12px; color: #f1f5f9; }
+        .section-title i { color: #10b981; }
+       
+        /* Карточки заданий */
+        .tasks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; }
+        .task-card { background: rgba(255,255,255,0.03); border-radius: 16px; padding: 25px; text-decoration: none; color: inherit; transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.05); position: relative; overflow: hidden; }
+        .task-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.06); border-color: rgba(16, 185, 129, 0.3); }
+        .task-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #10b981, #06b6d4); }
+       
+        .task-badge { position: absolute; top: 15px; right: 15px; background: linear-gradient(90deg, #f59e0b, #f97316); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+       
+        .task-header { display: flex; align-items: flex-start; gap: 15px; margin-bottom: 20px; }
+        .task-number { background: linear-gradient(135deg, #10b981, #06b6d4); color: white; width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 700; flex-shrink: 0; }
+        .task-info h3 { font-size: 1.3rem; font-weight: 600; margin-bottom: 8px; }
+        .task-reward { font-size: 1.8rem; font-weight: 700; background: linear-gradient(90deg, #10b981, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
+       
+        .task-details { margin-top: 15px; }
+        .detail-item { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; color: #cbd5e1; }
+        .detail-item i { color: #10b981; width: 20px; }
+       
+        .task-buttons { display: flex; gap: 10px; margin-top: 20px; }
+        .start-btn { flex: 1; text-align: center; background: linear-gradient(90deg, #10b981, #06b6d4); color: white; padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; border: none; cursor: pointer; font-family: inherit; font-size: 0.95rem; }
+        .start-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3); }
+        .claim-btn { flex: 1; text-align: center; background: linear-gradient(90deg, #8b5cf6, #3b82f6); color: white; padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; border: none; cursor: pointer; font-family: inherit; font-size: 0.95rem; }
+        .claim-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3); }
+       
+        /* Баннер ТОП */
+        .top-banner { background: linear-gradient(90deg, #f59e0b, #f97316); color: white; padding: 25px; border-radius: 16px; margin-bottom: 30px; text-align: center; position: relative; overflow: hidden; }
+        .top-banner::before { content: '🔥 ТОП ЗАДАНИЯ'; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.2); padding: 5px 20px; border-radius: 20px; font-size: 0.9rem; font-weight: 600; }
+        .top-banner h2 { font-size: 2rem; margin: 30px 0 15px; }
+        .top-banner p { font-size: 1.1rem; opacity: 0.9; max-width: 800px; margin: 0 auto; }
+       
+        /* Предупреждение */
+        .warning-box { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 20px; margin: 25px 0; display: flex; align-items: flex-start; gap: 15px; }
+        .warning-box i { color: #ef4444; font-size: 1.5rem; margin-top: 2px; }
+       
+        /* Футер */
+        .footer { text-align: center; padding: 40px 0; margin-top: 50px; color: #64748b; border-top: 1px solid rgba(255,255,255,0.05); }
+        .social-links { display: flex; justify-content: center; gap: 20px; margin: 20px 0; }
+        .social-link { width: 45px; height: 45px; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: #94a3b8; text-decoration: none; transition: all 0.3s ease; }
+        .social-link:hover { background: #10b981; color: white; transform: translateY(-3px); }
+       
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            .header { padding: 30px 15px; }
+            h1 { font-size: 2.2rem; }
+            .tasks-grid { grid-template-columns: 1fr; }
+            .contact-panel, .stats { flex-direction: column; align-items: center; }
+            .task-buttons { flex-direction: column; }
+            .stat-item { min-width: 150px; }
+            .top-banner h2 { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Шапка -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-tasks"></i>
+            </div>
+            <h1>Задания с выплатами</h1>
+            <p class="subtitle">Зарабатывайте на оформлении карт, ИП и финансовых продуктов</p>
+           
+            <!-- Статистика -->
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number">12+</div>
+                    <div class="stat-label">Активных заданий</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">до 5 750 ₽</div>
+                    <div class="stat-label">Максимальная выплата</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Гарантия выплат</div>
+                </div>
+            </div>
+           
+            <div class="contact-panel">
+                <div class="contact-badge">
+                    <i class="fab fa-telegram"></i>
+                    <span>Для выплат: @Whatnotyou</span>
+                </div>
+                <div class="contact-badge">
+                    <i class="fas fa-clock"></i>
+                    <span>Выплаты: 1-3 рабочих дня</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Баннер ТОП заданий -->
+        <div class="top-banner">
+            <h2>🔥 ТОПОВЫЕ ЗАДАНИЯ</h2>
+            <p>Самые высокооплачиваемые задания с выплатами до 6 175 ₽. Идеально подходят для максимального заработка!</p>
+        </div>
+
+        <!-- ТОП задания -->
+        <section class="section">
+            <h2 class="section-title">
+                <i class="fas fa-crown"></i>
+                ТОПовые задания с высокой оплатой
+            </h2>
+           
+            <div class="warning-box">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <strong>Внимание!</strong> Задания по ИП требуют понимания процесса. Если не знаете как оформлять ИП - не начинайте, ждите подробного поста с инструкцией.
+                </div>
+            </div>
+           
+            <div class="tasks-grid">
+                <!-- Задание 1: ИП + Альфа-Банк -->
+                <div class="task-card">
+                    <div class="task-badge">ТОП-1</div>
+                    <div class="task-header">
+                        <div class="task-number">1</div>
+                        <div class="task-info">
+                            <h3>ИП (НПД) + РКО в Альфа-Банке</h3>
+                            <div class="task-reward">5 750 ₽</div>
+                            <div class="detail-item">
+                                <i class="fas fa-user"></i>
+                                <span>Условие: От 18 лет</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-details">
+                        <div class="detail-item">
+                            <i class="fas fa-briefcase"></i>
+                            <span>Регистрация ИП на НПД</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-university"></i>
+                            <span>Открытие РКО в Альфа-Банке</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Премия за комплексное выполнение</span>
+                        </div>
+                    </div>
+                    <div class="task-buttons">
+                        <button class="start-btn" onclick="openLink('https://t.fincpanetwork.ru/click/24715/337/?erid=2W5zFJerRPE')">
+                            <i class="fas fa-play-circle"></i> Начать задание
+                        </button>
+                        <button class="claim-btn" onclick="claimPayment('ИП (НПД) + РКО в Альфа-Банке', 5750)">
+                            <i class="fas fa-hand-holding-usd"></i> Получить выплату
+                        </button>
+                    </div>
+                </div>
+               
+                <!-- Задание 2: ИП + Газпром -->
+                <div class="task-card">
+                    <div class="task-badge">ТОП-2</div>
+                    <div class="task-header">
+                        <div class="task-number">2</div>
+                        <div class="task-info">
+                            <h3>ИП (НПД) + РКО в Газпроме</h3>
+                            <div class="task-reward">6 175 ₽</div>
+                            <div class="detail-item">
+                                <i class="fas fa-user"></i>
+                                <span>Условие: От 18 лет</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-details">
+                        <div class="detail-item">
+                            <i class="fas fa-briefcase"></i>
+                            <span>Регистрация ИП на НПД</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-university"></i>
+                            <span>Открытие РКО в Газпромбанке</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Высокая оплата за комплекс</span>
+                        </div>
+                    </div>
+                    <div class="task-buttons">
+                        <button class="start-btn" onclick="openLink('https://t.fincpanetwork.ru/click/24715/353/?erid=2W5zFJK9LBJ')">
+                            <i class="fas fa-play-circle"></i> Начать задание
+                        </button>
+                        <button class="claim-btn" onclick="claimPayment('ИП (НПД) + РКО в Газпроме', 6175)">
+                            <i class="fas fa-hand-holding-usd"></i> Получить выплату
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Все задания с картами -->
+        <section class="section">
+            <h2 class="section-title">
+                <i class="fas fa-credit-card"></i>
+                Задания по банковским картам
+            </h2>
+            <p style="color: #94a3b8; margin-bottom: 25px; font-size: 1.1rem;">Оформите карту по ссылке и получите выплату после выполнения условий</p>
+           
+            <div class="tasks-grid">
+                <!-- Задание 3: ВТБ дебетовая -->
+                <div class="task-card">
+                    <div class="task-header">
+                        <div class="task-number">3</div>
+                        <div class="task-info">
+                            <h3>Дебетовая карта ВТБ</h3>
+                            <div class="task-reward">1 250 ₽</div>
+                            <div class="detail-item">
+                                <i class="fas fa-user"></i>
+                                <span>Условие: От 18 лет</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-details">
+                        <div class="detail-item">
+                            <i class="fas fa-bullseye"></i>
+                            <span>Цель: Пополнение и покупка на 500 ₽</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Можно с родителями</span>
+                        </div>
+                    </div>
+                    <div class="task-buttons">
+                        <button class="start-btn" onclick="openLink('https://go.leadgid.ru/aff_c?aff_id=138466&offer_id=5006&p=adnetwork')">
+                            <i class="fas fa-play-circle"></i> Оформить карту
+                        </button>
+                        <button class="claim-btn" onclick="claimPayment('Дебетовая карта ВТБ', 1250)">
+                            <i class="fas fa-hand-holding-usd"></i> Получить 1250 ₽
+                        </button>
+                    </div>
+                </div>
+               
+                <!-- Задание 4: Зенит кредитная -->
+                <div class="task-card">
+                    <div class="task-header">
+                        <div class="task-number">4</div>
+                        <div class="task-info">
+                            <h3>Кредитная карта Зенита</h3>
+                            <div class="task-reward">2 600 ₽</div>
+                            <div class="detail-item">
+                                <i class="fas fa-user"></i>
+                                <span>Условие: От 18 лет</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-details">
+                        <div class="detail-item">
+                            <i class="fas fa-bullseye"></i>
+                            <span>Цель: Получение карты</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Кредитная карта</span>
+                        </div>
+                    </div>
+                    <div class="task-buttons">
+                        <button class="start-btn" onclick="openLink('https://go.leadgid.ru/aff_c?aff_id=138466&offer_id=6440&p=adnetwork')">
+                            <i class="fas fa-play-circle"></i> Оформить карту
+                        </button>
+                        <button class="claim-btn" onclick="claimPayment('Кредитная карта Зенита', 2600)">
+                            <i class="fas fa-hand-holding-usd"></i> Получить 2600 ₽
+                        </button>
+                    </div>
+                </div>
+               
+                <!-- Задание 5: Альфа Апельсин -->
+                <div class="task-card">
+                    <div class="task-header">
+                        <div class="task-number">5</div>
+                        <div class="task-info">
+                            <h3>Апельсиновая карта (Альфа)</h3>
+                            <div class="task-reward">650 ₽</div>
+                            <div class="detail-item">
+                                <i class="fas fa-user"></i>
+                                <span>Условие: От 18 лет</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-details">
+                        <div class="detail-item">
+                            <i class="fas fa-bullseye"></i>
+                            <span>Цель: Покупка от 1 ₽</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Любая покупка по карте</span>
+                        </div>
+                    </div>
+                    <div class="task-buttons">
+                        <button class="start-btn" onclick="openLink('https://go.leadgid.com/aff_c?aff_id=138466&offer_id=7049&p=adnetwork')">
+                            <i class="fas fa-play-circle"></i> Оформить карту
+                        </button>
+                        <button class="claim-btn" onclick="claimPayment('Апельсиновая карта Альфа', 650)">
+                            <i class="fas fa-hand-holding-usd"></i> Получить 650 ₽
+                        </button>
+                    </div>
+                </div>
+               
+                <!-- Задание 6: Уралсиб -->
+                <div class="task-card">
+                    <div class="task-header">
+                        <div class="task-number">6</div>
+                        <div class="task-info">
+                            <h3>Кредитная карта Уралсиб</h3>
+                            <div class="task-reward">1 600 ₽</div>
+                            <div class="detail-item">
+                                <i class="fas fa-user"></i>
+                                <span>Условие: От 20 лет</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-details">
+                        <div class="detail-item">
+                            <i class="fas fa-bullseye"></i>
+                            <span>Цель: Получение карты</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Кредитная карта</span>
+                        </div>
+                    </div>
+                    <div class="task-buttons">
+                        <button class="start-btn" onclick="openLink('https://go.leadgid.ru/aff_c?aff_id=138466&offer_id=5567&p=adnetwork')">
+                            <i class="fas fa-play-circle"></i> Оформить карту
+                        </button>
+                        <button class="claim-btn" onclick="claimPayment('Кредитная карта Уралсиб', 1600)">
+                            <i class="fas fa-hand-holding-usd"></i> Получить 1600 ₽
+                        </button>
+                    </div>
+                </div>
+               
+                <!-- Задание 7: А деньги -->
+                <div class="task-card">
+                    <div class="task-header">
+                        <div class="task-number">7</div>
+                        <div class="task-info">
+                            <h3>Кредитная карта "А деньги"</h3>
+                            <div class="task-reward">1 700 ₽</div>
+                            <div class="detail-item">
+                                <i class="fas fa-user"></i>
+                                <span>Условие: От 18 лет</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-details">
+                        <div class="detail-item">
+                            <i class="fas fa-bullseye"></i>
+                            <span>Цель: Получение карты</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Кредитная карта</span>
+                        </div>
+                    </div>
+                    <div class="task-buttons">
+                        <button class="start-btn" onclick="openLink('https://go.leadgid.ru/aff_c?aff_id=138466&offer_id=6362&p=adnetwork')">
+                            <i class="fas fa-play-circle"></i> Оформить карту
+                        </button>
+                        <button class="claim-btn" onclick="claimPayment('Кредитная карта А деньги', 1700)">
+                            <i class="fas fa-hand-holding-usd"></i> Получить 1700 ₽
+                        </button>
+                    </div>
+                </div>
+               
+                <!-- Задание 8: Фора банк -->
+                <div class="task-card">
+                    <div class="task-header">
+                        <div class="task-number">8</div>
+                        <div class="task-info">
+                            <h3>Дебетовая карта Фора банк</h3>
+                            <div class="task-reward">700 ₽</div>
+                            <div class="detail-item">
+                                <i class="fas fa-user"></i>
+                                <span>Условие: От 18 лет</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-details">
+                        <div class="detail-item">
+                            <i class="fas fa-bullseye"></i>
+                            <span>Цель: Получение карты</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-university"></i>
+                            <span>Дебетовая карта</span>
+                        </div>
+                    </div>
+                    <div class="task-buttons">
+                        <button class="start-btn" onclick="openLink('https://go.leadgid.ru/aff_c?aff_id=138466&offer_id=6236&p=adnetwork')">
+                            <i class="fas fa-play-circle"></i> Оформить карту
+                        </button>
+                        <button class="claim-btn" onclick="claimPayment('Дебетовая карта Фора банк', 700)">
+                            <i class="fas fa-hand-holding-usd"></i> Получить 700 ₽
+                        </button>
+                    </div>
+                </div>
+               
+                <!-- Задание 9: Газпром дебетовая -->
+                <div class="task-card">
+                    <div class="task-header">
+                        <div class="task-number">9</div>
+                        <div class="task-info">
+                            <h3>Дебетовая карта Газпромбанка</h3>
+                            <div class="task-reward">1 150 ₽</div>
+                            <div class="detail-item">
+                                <i class="fas fa-user"></i>
+                                <span>Условие: От 18 лет</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-details">
+                        <div class="detail-item">
+                            <i class="fas fa-bullseye"></i>
+                            <span>Цель: Карта + транзакции 500 ₽</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>Транзакции на 500 ₽</span>
+                        </div>
+                    </div>
+                    <div class="task-buttons">
+                        <button class="start-btn" onclick="openLink('https://t.fincpanetwork.ru/click/24715/611/?erid=2W5zFFvKVYk')">
+                            <i class="fas fa-play-circle"></i> Оформить карту
+                        </button>
+                        <button class="claim-btn" onclick="claimPayment('Дебетовая карта Газпромбанка', 1150)">
+                            <i class="fas fa-hand-holding-usd"></i> Получить 1150 ₽
+                        </button>
+                    </div>
+                </div>
+               
+                <!-- Задание 10: Альфа дебетовая -->
+                <div class="task-card">
+                    <div class="task-header">
+                        <div class="task-number">10</div>
+                        <div class="task-info">
+                            <h3>Дебетовая карта Альфа-Банка</h3>
+                            <div class="task-reward">500 ₽</div>
+                            <div class="detail-item">
+                                <i class="fas fa-user"></i>
+                                <span>Условие: От 14 лет</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-details">
+                        <div class="detail-item">
+                            <i class="fas fa-bullseye"></i>
+                            <span>Цель: Карта + транзакция от 1 ₽</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>Любая транзакция</span>
+                        </div>
+                    </div>
+                    <div class="task-buttons">
+                        <button class="start-btn" onclick="openLink('https://t.fincpanetwork.ru/click/24715/344/?erid=2W5zFGGyuf6')">
+                            <i class="fas fa-play-circle"></i> Оформить карту
+                        </button>
+                        <button class="claim-btn" onclick="claimPayment('Дебетовая карта Альфа-Банка', 500)">
+                            <i class="fas fa-hand-holding-usd"></i> Получить 500 ₽
+                        </button>
+                    </div>
+                </div>
+               
+                <!-- Задание 11: Сбер молодежная -->
+                <div class="task-card">
+                    <div class="task-header">
+                        <div class="task-number">11</div>
+                        <div class="task-info">
+                            <h3>Молодежная карта Сбера</h3>
+                            <div class="task-reward">1 000 ₽</div>
+                            <div class="detail-item">
+                                <i class="fas fa-user"></i>
+                                <span>Условие: От 14 лет</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-details">
+                        <div class="detail-item">
+                            <i class="fas fa-bullseye"></i>
+                            <span>Цель: Карта + транзакция от 1 ₽</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-user-graduate"></i>
+                            <span>Молодежная карта</span>
+                        </div>
+                    </div>
+                    <div class="task-buttons">
+                        <button class="start-btn" onclick="openLink('https://s.sber.ru/Gj41zl')">
+                            <i class="fas fa-play-circle"></i> Оформить карту
+                        </button>
+                        <button class="claim-btn" onclick="claimPayment('Молодежная карта Сбера', 1000)">
+                            <i class="fas fa-hand-holding-usd"></i> Получить 1000 ₽
+                        </button>
+                    </div>
+                </div>
+               
+                <!-- Задание 12: МТС -->
+                <div class="task-card">
+                    <div class="task-header">
+                        <div class="task-number">12</div>
+                        <div class="task-info">
+                            <h3>Дебетовая карта МТС</h3>
+                            <div class="task-reward">600 ₽</div>
+                            <div class="detail-item">
+                                <i class="fas fa-user"></i>
+                                <span>Условие: От 18 лет</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-details">
+                        <div class="detail-item">
+                            <i class="fas fa-bullseye"></i>
+                            <span>Цель: Карта + транзакции 500 ₽</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span>Карта от МТС</span>
+                        </div>
+                    </div>
+                    <div class="task-buttons">
+                        <button class="start-btn" onclick="openLink('https://go.leadgid.com/aff_c?aff_id=138466&offer_id=6766&p=adnetwork')">
+                            <i class="fas fa-play-circle"></i> Оформить карту
+                        </button>
+                        <button class="claim-btn" onclick="claimPayment('Дебетовая карта МТС', 600)">
+                            <i class="fas fa-hand-holding-usd"></i> Получить 600 ₽
+                        </button>
+                    </div>
+                </div>
+               
+                <!-- Задание 13: ВТБ кредитная -->
+                <div class="task-card">
+                    <div class="task-header">
+                        <div class="task-number">13</div>
+                        <div class="task-info">
+                            <h3>Кредитная карта ВТБ</h3>
+                            <div class="task-reward">1 550 ₽</div>
+                            <div class="detail-item">
+                                <i class="fas fa-user"></i>
+                                <span>Условие: От 18 лет</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-details">
+                        <div class="detail-item">
+                            <i class="fas fa-bullseye"></i>
+                            <span>Цель: Карта + транзакция от 1 ₽</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Кредитная карта</span>
+                        </div>
+                    </div>
+                    <div class="task-buttons">
+                        <button class="start-btn" onclick="openLink('https://t.fincpanetwork.ru/click/24715/622/?erid=2W5zFJExbPv')">
+                            <i class="fas fa-play-circle"></i> Оформить карту
+                        </button>
+                        <button class="claim-btn" onclick="claimPayment('Кредитная карта ВТБ', 1550)">
+                            <i class="fas fa-hand-holding-usd"></i> Получить 1550 ₽
+                        </button>
+                    </div>
+                </div>
+            </div>
+           
+            <!-- Итоговая кнопка -->
+            <div style="text-align: center; margin-top: 40px;">
+                <button class="claim-btn" style="padding: 18px 40px; font-size: 1.1rem; max-width: 500px;" onclick="claimPayment('Несколько заданий', 0)">
+                    <i class="fas fa-file-invoice-dollar"></i> Выполнил задание — получить выплату
+                </button>
+                <p style="color: #94a3b8; margin-top: 15px; font-size: 0.95rem;">
+                    Нажмите кнопку для автоматического сообщения в Telegram: @Whatnotyou
+                </p>
+            </div>
+        </section>
+
+        <!-- Инструкция -->
+        <section class="section">
+            <h2 class="section-title">
+                <i class="fas fa-info-circle"></i>
+                Как получить выплату?
+            </h2>
+           
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div style="background: rgba(255,255,255,0.03); padding: 25px; border-radius: 12px; text-align: center;">
+                    <div style="background: linear-gradient(135deg, #10b981, #06b6d4); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 1.5rem;">
+                        <i class="fas fa-mouse-pointer"></i>
+                    </div>
+                    <h3 style="margin-bottom: 10px;">1. Нажмите "Оформить карту"</h3>
+                    <p style="color: #94a3b8;">Перейдите по ссылке и выполните задание</p>
+                </div>
+               
+                <div style="background: rgba(255,255,255,0.03); padding: 25px; border-radius: 12px; text-align: center;">
+                    <div style="background: linear-gradient(135deg, #8b5cf6, #3b82f6); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 1.5rem;">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3 style="margin-bottom: 10px;">2. Выполните условия</h3>
+                    <p style="color: #94a3b8;">Получите карту и совершите нужные операции</p>
+                </div>
+               
+                <div style="background: rgba(255,255,255,0.03); padding: 25px; border-radius: 12px; text-align: center;">
+                    <div style="background: linear-gradient(135deg, #f59e0b, #f97316); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 1.5rem;">
+                        <i class="fas fa-hand-holding-usd"></i>
+                    </div>
+                    <h3 style="margin-bottom: 10px;">3. Нажмите "Получить выплату"</h3>
+                    <p style="color: #94a3b8;">Автоматическое сообщение в Telegram</p>
+                </div>
+               
+                <div style="background: rgba(255,255,255,0.03); padding: 25px; border-radius: 12px; text-align: center;">
+                    <div style="background: linear-gradient(135deg, #ef4444, #f97316); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 1.5rem;">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <h3 style="margin-bottom: 10px;">4. Получите деньги</h3>
+                    <p style="color: #94a3b8;">Выплата в течение 1-3 рабочих дней</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Футер -->
+        <footer class="footer">
+            <div class="social-links">
+                <a href="https://t.me/Whatnotyou" target="_blank" class="social-link">
+                    <i class="fab fa-telegram"></i>
+                </a>
+                <a href="#" onclick="claimPayment('Вопрос по выплатам', 0)" class="social-link">
+                    <i class="fas fa-question-circle"></i>
+                </a>
+            </div>
+            <p>© 2025 Задания с выплатами. Все права защищены.</p>
+            <p style="font-size: 0.9rem; margin-top: 10px; color: #94a3b8;">Выплаты по заданиям — гарантированные деньги за оформление</p>
+            <p style="font-size: 0.8rem; margin-top: 5px; color: #64748b;">По всем вопросам: @Whatnotyou</p>
+        </footer>
+    </div>
+
+    <script>
+        // Функция для открытия ссылок
+        function openLink(url) {
+            window.open(url, '_blank');
+        }
+       
+        // Функция для автоматического сообщения о выплате
+        function claimPayment(taskName, amount) {
+            let message = `Здравствуйте! Заказал карту/выполнил задание "${taskName}". Как получить выплату${amount ? ` ${amount} ₽` : ''}?`;
+            
+            // Открываем Telegram с автоматическим сообщением
+            window.open(`https://t.me/Whatnotyou?text=${encodeURIComponent(message)}`, '_blank');
+            
+            // Показываем уведомление
+            showNotification(`Сообщение отправлено в Telegram: @Whatnotyou`);
+        }
+       
+        // Функция показа уведомления
+        function showNotification(text) {
+            // Создаем элемент уведомления
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(90deg, #10b981, #06b6d4);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+                font-weight: 500;
+            `;
+            
+            notification.innerHTML = `
+                <i class="fas fa-check-circle" style="margin-right: 10px;"></i>
+                ${text}
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Удаляем уведомление через 5 секунд
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 5000);
+        }
+       
+        // Добавляем стили для анимации
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+       
+        // Сохраняем просмотренные задания в localStorage
+        document.querySelectorAll('.start-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const taskCard = this.closest('.task-card');
+                const taskNumber = taskCard.querySelector('.task-number').textContent;
+                const taskName = taskCard.querySelector('h3').textContent;
+                
+                // Сохраняем в localStorage
+                localStorage.setItem('lastViewedTask', JSON.stringify({
+                    number: taskNumber,
+                    name: taskName,
+                    time: new Date().toISOString()
+                }));
+            });
+        });
+       
+        // При загрузке страницы проверяем, было ли просмотрено задание
+        window.addEventListener('load', function() {
+            const lastTask = localStorage.getItem('lastViewedTask');
+            if (lastTask) {
+                const task = JSON.parse(lastTask);
+                console.log(`Последнее просмотренное задание: ${task.number}. ${task.name}`);
+            }
+        });
+    </script>
+</body>
+</html>
